@@ -14,8 +14,7 @@ app.use(express.json());
 app.use(cors());
 
 app.post("/chat", async (req, res) => {
-  const { currentPrompt, previousPrompts } = req.body;
-  previousPrompts = [ ...currentPrompt ];
+  const { previousPrompts } = req.body;
 
   const completion = await openai.chat.completions.create({
     model: "gpt-3.5-turbo",
@@ -23,7 +22,6 @@ app.post("/chat", async (req, res) => {
   });
 
   const reply = completion.data.choices[0].message;
-  previousPrompts = [ ...reply ];
 
   console.log(previousPrompts)
   res.json({ reply });
