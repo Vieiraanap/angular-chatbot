@@ -18,6 +18,9 @@
     "@angular/platform-browser": "^17.3.11",
     "@angular/platform-browser-dynamic": "^17.3.11",
     "@angular/router": "^17.3.11",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "openai": "^4.50.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.7"
@@ -34,5 +37,10 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
     "typescript": "~5.4.5"
-  }
+  },
+  "description": "Chabot em Aplicação Angular utilizando OpenAI API",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
