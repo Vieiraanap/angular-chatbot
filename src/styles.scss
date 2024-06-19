@@ -1,0 +1,31 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  overflow: hidden;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  height: 100vh;
+}
+
+h2 {
+  font-size: 20px !important;
+  margin: 5px 0 !important;
+}
+
+p {
+  margin: 10px !important;
+}
+
+ul {
+  margin: 15px !important;
+
+  li {
+    margin-left: 10px !important;
+    margin-bottom: 10px !important;
+  }
+}
