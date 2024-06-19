@@ -1,3 +1,61 @@
-<p>
-  chatbot works!
-</p>
+<section class="header-container">
+  <p>Angular ChatBot</p>
+
+  <button
+    class="input-button"
+    title="Change LLM"
+    (click)="changeLlm()"
+  >
+    <span class="material-symbols-outlined">
+      model_training
+    </span>
+  </button>
+</section>
+
+<section class="chat-container" #chatContainer>
+  @for (message of chatMessages; track message; let i = $index) {
+
+    <div class="chat-message" [ngClass]=" message.role === 'user' ? message.role + '-msg' : '' ">
+
+      <div [ngClass]="message.role">
+
+        @if (i === 0 || chatMessages[i].role !== chatMessages[i - 1].role) {
+          <span class="chat-role">{{ showRole(message.role) }}</span>
+        }
+        <div class="chat-content" [innerHTML]="showMessage(message)"></div>
+
+      </div>
+
+    </div>
+  } @empty {
+
+    <p>Hello! How can I help you today?</p>
+  }
+</section>
+
+<section class="input-container">
+  <input
+    class="input-textfield"
+    [(ngModel)]="userPrompt"
+    placeholder="Enter your message"
+    (keydown.enter)="sendPrompt()"
+  />
+<!--
+  <button
+    class="input-button"
+  >
+    <span class="material-symbols-outlined">
+      mic
+    </span>
+  </button> -->
+
+  <button
+    class="input-button"
+    title="Send Message"
+    (click)="sendPrompt()"
+  >
+  <span class="material-symbols-outlined">
+    send
+  </span>
+</button>
+</section>
