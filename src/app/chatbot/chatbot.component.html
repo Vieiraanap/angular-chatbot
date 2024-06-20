@@ -6,6 +6,7 @@
     title="Change LLM"
     (click)="changeLlm()"
   >
+    {{ llmName }}
     <span class="material-symbols-outlined">
       model_training
     </span>
@@ -27,8 +28,15 @@
       </div>
 
     </div>
-  } @empty {
 
+    @if (showTypingIndicator) {
+      <section class="typing-indicator">
+        <span class="material-symbols-outlined">
+          more_horiz
+        </span>
+      </section>
+    }
+  } @empty {
     <p>Hello! How can I help you today?</p>
   }
 </section>
@@ -40,22 +48,14 @@
     placeholder="Enter your message"
     (keydown.enter)="sendPrompt()"
   />
-<!--
-  <button
-    class="input-button"
-  >
-    <span class="material-symbols-outlined">
-      mic
-    </span>
-  </button> -->
 
   <button
     class="input-button"
     title="Send Message"
     (click)="sendPrompt()"
   >
-  <span class="material-symbols-outlined">
-    send
-  </span>
-</button>
+    <span class="material-symbols-outlined">
+      send
+    </span>
+  </button>
 </section>

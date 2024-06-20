@@ -13,9 +13,10 @@ import { MarkdownService } from '../services/markdown.service';
 export class ChatbotComponent {
 
   userPrompt!: string;
-  // {role: 'user', content: 'hi'}, {role: 'assistant', content: 'hello'}
-  chatMessages: Prompt[] = [{role: 'user', content: 'hi'}, {role: 'assistant', content: 'hello'}];
+  chatMessages: Prompt[] = [];
   llm: Llm = Llm.GEMINI;
+  llmName: AssistantName = AssistantName.model;
+  showTypingIndicator: boolean = false;
 
   @ViewChild('chatContainer', { static: false })
   chatContainer!: ElementRef;
@@ -27,15 +28,15 @@ export class ChatbotComponent {
 
   sendPrompt(): void {
     if (this.userPrompt !== '' && this.userPrompt) {
-      const userPrompt: Prompt = this.getPromptByUserRole(ChatRoles.USER, this.userPrompt);
+      const userPrompt: Prompt = this.getPrompt(ChatRoles.USER, this.userPrompt);
       this.chatMessages.push(userPrompt);
       this.scrollToBottom();
-
-      this.llmService.post(this.userPrompt, this.chatMessages, this.llm).subscribe(res => {
-        const assistantReply: string = this.markdownService.convertMarkdownText(res.reply);
-        this.chatMessages.push(this.getPromptByUserRole(this.llm == 0 ? ChatRoles.MODEL : ChatRoles.ASSISTANT, assistantReply));
-        this.scrollToBottom();
-      });
+      this.showTypingIndicator = true;
+      this.llmService.post(this.userPrompt, this.chatMessages, this.llm).subscribe(
+        res => {
+          this.getAssistantReply(res.reply)
+        }
+      );
       this.userPrompt = '';
     }
   }
@@ -55,7 +56,21 @@ export class ChatbotComponent {
     return AssistantName[role as keyof typeof AssistantName];
   }
 
-  getPromptByUserRole(role: ChatRoles, promptText: string): Prompt {
+  changeLlm(): void {
+    this.llm = this.llm === 0 ? 1 : 0;
+    this.llmName = this.llm === 0 ? AssistantName.model : AssistantName.assistant;
+    this.chatMessages = [];
+    this.userPrompt = '';
+  }
+
+  private getAssistantReply(reply: string): void {
+    const assistantReply: string = this.markdownService.convertMarkdownText(reply);
+    this.chatMessages.push(this.getPrompt(this.llm == 0 ? ChatRoles.MODEL : ChatRoles.ASSISTANT, assistantReply));
+    this.scrollToBottom();
+    this.showTypingIndicator = false;
+  }
+
+  private getPrompt(role: ChatRoles, promptText: string): Prompt {
     if (this.llm == 0) {
       return { role: role, parts: [{ text: promptText }] };
     } else {
@@ -63,15 +78,11 @@ export class ChatbotComponent {
     }
   }
 
-  scrollToBottom(): void {
+  private scrollToBottom(): void {
     setTimeout(() => {
       this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
     }, 0);
   }
-
-  changeLlm(): void {
-    this.llm = this.llm === 0 ? 1 : 0;
-    this.chatMessages = [];
-    this.userPrompt = '';
-  }
 }
+
+// {role: 'user', content: 'hi'}, {role: 'assistant', content: 'hello'}
