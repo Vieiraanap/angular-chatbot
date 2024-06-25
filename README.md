@@ -13,14 +13,22 @@ Este é um projeto de um chatbot desenvolvido com Angular. Seu objetivo é forne
 
 A interface segue o padrão visual atual, bem como o comportamento padrão de uma estrutura de chat. Toda sua estilização e estruturação lógica e visual estão presentes no componente `<app-chatbot></app-chatbot>` para fins de simplificação do projeto.
 
-# Consumo das API`s
+# Consumo das API's
 
-Para consumir os serviços, foi criado o arquivo `server.js` compondo as lógicas necessárias de configuração e conexão, tanto com API da OpenAI, quanto com a do Google Gemini.
+Para consumir os serviços, foi criado o arquivo `server.js` compondo as lógicas necessárias de configuração e conexão, tanto com a API da OpenAI, quanto com a do Google Gemini.
 Além disso, há dois métodos `post` que expõem os endpoints utilizados pela aplicação, sendo um para cada API diferente.
 
-## Servidor JS
+# Servidor Angular
 
-Para executar o servidor express, execute no diretório do arquivo que contém a configuração de conexão com as API`s: `node nome-do-arquivo.js`
+Para iniciar o servidor de desenvolvimento, execute:
+
+```bash 
+ng serve
+```
+
+# Servidor Express
+
+Para executar o servidor express, execute no diretório do arquivo que contém a configuração de conexão com as API's: `node nome-do-arquivo.js`
 
 **Exemplo:**
 ```bash 
