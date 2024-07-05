@@ -46,3 +46,5 @@ Vale ressaltar que deve-se, ainda, definir em um arquivo de estilo para cada tip
 * "express": "^4.19.2",
 * "marked": "^13.0.0",
 * "openai": "^4.50.0",
+
+[Guia passo a passo do projeto]()
