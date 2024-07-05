@@ -16,7 +16,6 @@ A interface segue o padrão visual atual, bem como o comportamento padrão de um
 # Consumo das API's
 
 Para consumir os serviços, foi criado o arquivo `server.js` compondo as lógicas necessárias de configuração e conexão, tanto com a API da OpenAI, quanto com a do Google Gemini.
-Além disso, há dois métodos `post` que expõem os endpoints utilizados pela aplicação, sendo um para cada API diferente.
 
 # Servidor Angular
 
