@@ -1,4 +1,4 @@
-export enum Llm {
+export enum Api {
   GEMINI,
   OPENAI
 }

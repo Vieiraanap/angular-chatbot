@@ -1,9 +1,10 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Prompt } from '../interfaces/chat-prompt.interface';
-import { LlmService } from '../services/llm.service';
+import { ApiService } from '../services/llm.service';
 import { AssistantName, ChatRoles } from '../enums/chat-roles.enum';
-import { Llm } from '../enums/llm.enum';
+import { Api } from '../enums/llm.enum';
 import { MarkdownService } from '../services/markdown.service';
+import { marked } from 'marked';
 
 @Component({
   selector: 'app-chatbot',
@@ -14,27 +15,27 @@ export class ChatbotComponent {
 
   userPrompt!: string;
   chatMessages: Prompt[] = [];
-  llm: Llm = Llm.GEMINI;
-  llmName: AssistantName = AssistantName.model;
   showTypingIndicator: boolean = false;
+  api: Api = Api.GEMINI;
+  apiName: AssistantName = AssistantName.model;
 
   @ViewChild('chatContainer', { static: false })
   chatContainer!: ElementRef;
 
   constructor(
-    private llmService: LlmService,
+    private apiService: ApiService,
     private markdownService: MarkdownService
   ) { }
 
   sendPrompt(): void {
     if (this.userPrompt !== '' && this.userPrompt) {
-      const userPrompt: Prompt = this.getPrompt(ChatRoles.USER, this.userPrompt);
-      this.chatMessages.push(userPrompt);
-      this.scrollToBottom();
+      this.addMessageToChat(ChatRoles.USER, this.userPrompt)
       this.showTypingIndicator = true;
-      this.llmService.post(this.userPrompt, this.chatMessages, this.llm).subscribe(
+      this.apiService.post(this.api, this.chatMessages, this.userPrompt).subscribe(
         res => {
-          this.getAssistantReply(res.reply)
+          const assistantReply: string = marked(res.reply).toString();
+          this.addMessageToChat(this.api == 0 ? ChatRoles.MODEL : ChatRoles.ASSISTANT, assistantReply)
+          this.showTypingIndicator = false;
         }
       );
       this.userPrompt = '';
@@ -56,22 +57,20 @@ export class ChatbotComponent {
     return AssistantName[role as keyof typeof AssistantName];
   }
 
-  changeLlm(): void {
-    this.llm = this.llm === 0 ? 1 : 0;
-    this.llmName = this.llm === 0 ? AssistantName.model : AssistantName.assistant;
+  changeApi(): void {
+    this.api = this.api === 0 ? 1 : 0;
+    this.apiName = this.api === 0 ? AssistantName.model : AssistantName.assistant;
     this.chatMessages = [];
     this.userPrompt = '';
   }
 
-  private getAssistantReply(reply: string): void {
-    const assistantReply: string = this.markdownService.convertMarkdownText(reply);
-    this.chatMessages.push(this.getPrompt(this.llm == 0 ? ChatRoles.MODEL : ChatRoles.ASSISTANT, assistantReply));
+  private addMessageToChat(role: ChatRoles, message: string): void {
+    this.chatMessages.push(this.getMessage(role, message));
     this.scrollToBottom();
-    this.showTypingIndicator = false;
   }
 
-  private getPrompt(role: ChatRoles, promptText: string): Prompt {
-    if (this.llm == 0) {
+  private getMessage(role: ChatRoles, promptText: string): Prompt {
+    if (this.api == 0) {
       return { role: role, parts: [{ text: promptText }] };
     } else {
       return { role: role, content: promptText };
