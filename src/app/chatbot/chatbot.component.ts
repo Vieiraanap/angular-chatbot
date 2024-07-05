@@ -33,7 +33,7 @@ export class ChatbotComponent {
       this.showTypingIndicator = true;
       this.apiService.post(this.api, this.chatMessages, this.userPrompt).subscribe(
         res => {
-          const assistantReply: string = marked(res.reply).toString();
+          const assistantReply: string = this.markdownService.convertMarkdownText(res.reply);
           this.addMessageToChat(this.api == 0 ? ChatRoles.MODEL : ChatRoles.ASSISTANT, assistantReply)
           this.showTypingIndicator = false;
         }
