@@ -13,7 +13,7 @@ import { marked } from 'marked';
 })
 export class ChatbotComponent {
 
-  userPrompt!: string;
+  userPrompt: string = '';
   chatMessages: Prompt[] = [];
   showTypingIndicator: boolean = false;
   api: Api = Api.GEMINI;
@@ -33,13 +33,17 @@ export class ChatbotComponent {
       this.showTypingIndicator = true;
       this.apiService.post(this.api, this.chatMessages, this.userPrompt).subscribe(
         res => {
-          const assistantReply: string = this.markdownService.convertMarkdownText(res.reply);
-          this.addMessageToChat(this.api == 0 ? ChatRoles.MODEL : ChatRoles.ASSISTANT, assistantReply)
-          this.showTypingIndicator = false;
+          this.getAssistantResponse(res.reply);
         }
       );
       this.userPrompt = '';
     }
+  }
+
+  getAssistantResponse(reply: string): void {
+    const assistantReply: string = this.markdownService.convertMarkdownText(reply);
+    this.addMessageToChat(this.api == 0 ? ChatRoles.MODEL : ChatRoles.ASSISTANT, assistantReply)
+    this.showTypingIndicator = false;
   }
 
   showMessage(prompt: Prompt): string {
