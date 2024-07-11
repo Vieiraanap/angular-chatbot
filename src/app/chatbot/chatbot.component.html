@@ -16,7 +16,7 @@
 <section class="chat-container" #chatContainer>
   @for (message of chatMessages; track message; let i = $index) {
 
-    <div class="chat-message" [ngClass]=" message.role === 'user' ? message.role + '-msg' : '' ">
+    <div class="chat-message" [ngClass]=" message.role === 'user' ? 'user-msg' : 'model-msg' ">
 
       <div [ngClass]="message.role">
 
@@ -53,6 +53,7 @@
     class="input-button"
     title="Send Message"
     (click)="sendPrompt()"
+    [disabled]="!userPrompt || userPrompt === ''"
   >
     <span class="material-symbols-outlined">
       send
