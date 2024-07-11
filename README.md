@@ -47,4 +47,4 @@ Vale ressaltar que deve-se, ainda, definir em um arquivo de estilo para cada tip
 * "marked": "^13.0.0",
 * "openai": "^4.50.0",
 
-[Guia passo a passo do projeto]()
+[Guia passo a passo do projeto](https://medium.com/@anapaulavieira.ac/criar-chatbot-angular17-openai-gemini-a56176c0b7b1)
